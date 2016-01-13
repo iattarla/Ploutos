@@ -1,0 +1,12 @@
+<p>
+	<strong>Title:</strong>
+	<%= @item.name %>
+</p>
+   
+<p>
+	<strong>Text:</strong>
+	<%= @item.note %>
+	</p>
+
+	<%= link_to 'Back', items_path %>
+	<%= link_to 'Edit', edit_item_path(@item) %>

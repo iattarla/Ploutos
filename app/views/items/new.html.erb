@@ -1,0 +1,36 @@
+<h1>New Article</h1>
+
+
+<%= form_for :item, url: items_path do |f| %>
+      
+	<% if @item.errors.any? %>
+		<div id = "error_explanation">
+			<h2>
+				<%= pluralize(@item.errors.count, "error") %>
+				prohibited thiis article from being saved:
+
+			</h2>
+			<ul>
+				<% @item.errors.full_messages.each do |msg| %>
+					<li><%=msg%>
+				</li>
+				<% end %>
+			</ul>
+		</div>
+	<%end %>
+	
+	<p>
+		<%= f.label :name %><br>
+		<%= f.text_field :name %>
+	</p>
+    
+	<p>
+		<%= f.label :note %><br>
+		<%= f.text_area :note %>
+	</p>
+ 
+      
+	<p>
+		<%= f.submit %>
+	</p>
+<% end %>
