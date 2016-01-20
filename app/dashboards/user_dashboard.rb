@@ -29,6 +29,7 @@ class UserDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     admin: Field::Boolean,
+    moderator: Field::Boolean,
   }
 
   # COLLECTION_ATTRIBUTES
@@ -69,6 +70,7 @@ class UserDashboard < Administrate::BaseDashboard
     :unlock_token,
     :locked_at,
     :admin,
+    :moderator,
   ]
 
   # Overwrite this method to customize how users are displayed
