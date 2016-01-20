@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
 
 	before_action :authenticate_user!
-
+	before_action :verify_is_moderator
 
 	def index
 		@categories = Category.all
@@ -66,4 +66,6 @@ class CategoriesController < ApplicationController
 	parent_id = params.require(:parent).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
 	return name.merge(Hash["parent_id" => parent_id ])
   end
+
+
 end
