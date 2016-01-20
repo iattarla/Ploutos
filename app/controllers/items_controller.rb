@@ -11,12 +11,13 @@ class ItemsController < ApplicationController
 	
 	def new
 		@item = Item.new	
+		@categories = Category.roots
 	end
 		
 	def create
 	#	render plain: params[:items].inspect
 	
-		@item = Item.new(item_params)
+		@item = Item.new(create_params)
 	
 		if @item.save
 	
@@ -43,6 +44,8 @@ class ItemsController < ApplicationController
 	
 	def show
 		@item = Item.find(params[:id])
+		@path = @item.category.ancestry_path
+		@qr = RQRCode::QRCode.new(@item.name).to_img.resize(200, 200).to_data_url 
 	end
 	
 	def destroy
@@ -54,7 +57,14 @@ class ItemsController < ApplicationController
 
   private
   def item_params
-	  params.require(:item).permit(:name, :note)
+	params.require(:item).permit(:name, :note)
+  end
+
+  def create_params
+	data = params.require(:item).permit(:name, :note)
+	category_id = params.require(:category).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
+	p category_id
+	return data.merge(Hash["category_id" => category_id ])
   end
 
 

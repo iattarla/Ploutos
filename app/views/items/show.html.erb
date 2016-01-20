@@ -6,7 +6,14 @@
 <p>
 	<strong>Text:</strong>
 	<%= @item.note %>
-	</p>
+</p>
+<p>
+	<%= image_tag @qr %>
+</p>
 
+<p>
+	<strong>Category:</strong>
+	<%= @path.join(">")%>
+</p>
 	<%= link_to 'Back', items_path %>
 	<%= link_to 'Edit', edit_item_path(@item) %>

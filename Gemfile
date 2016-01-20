@@ -38,8 +38,11 @@ gem 'devise'
 # Admin
 gem "administrate", "~> 0.1.2"
 
-#nested category
+# Nested categories
 gem 'closure_tree'
+
+# Qr Code
+gem 'rqrcode_png'
 
 
 group :development, :test do

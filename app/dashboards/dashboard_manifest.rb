@@ -12,6 +12,8 @@ class DashboardManifest
   DASHBOARDS = [
     :users,
     :items,
+   # :categories,
+   # :locations,
   ]
 
   # `ROOT_DASHBOARD`

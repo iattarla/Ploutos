@@ -11,14 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160109152337) do
+ActiveRecord::Schema.define(version: 20160120194849) do
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name",       limit: 255, null: false
-    t.integer  "parent_id",  limit: 4
-    t.integer  "sort_order", limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name",          limit: 255,  null: false
+    t.integer  "parent_id",     limit: 4
+    t.integer  "sort_order",    limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "custom_fields", limit: 4096
   end
 
   create_table "category_hierarchies", id: false, force: :cascade do |t|
@@ -31,10 +32,31 @@ ActiveRecord::Schema.define(version: 20160109152337) do
   add_index "category_hierarchies", ["descendant_id"], name: "category_desc_idx", using: :btree
 
   create_table "items", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.text     "note",        limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "category_id", limit: 4
+  end
+
+  add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+
+  create_table "location_hierarchies", id: false, force: :cascade do |t|
+    t.integer "ancestor_id",   limit: 4, null: false
+    t.integer "descendant_id", limit: 4, null: false
+    t.integer "generations",   limit: 4, null: false
+  end
+
+  add_index "location_hierarchies", ["ancestor_id", "descendant_id", "generations"], name: "location_anc_desc_idx", unique: true, using: :btree
+  add_index "location_hierarchies", ["descendant_id"], name: "location_desc_idx", using: :btree
+
+  create_table "locations", force: :cascade do |t|
     t.string   "name",       limit: 255
-    t.text     "note",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "code",       limit: 255
+    t.integer  "parent_id",  limit: 4
+    t.integer  "sort_order", limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "users", force: :cascade do |t|

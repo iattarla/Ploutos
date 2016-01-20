@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class ItemDashboard < Administrate::BaseDashboard
+class CategoryDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -8,12 +8,20 @@ class ItemDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    category: Field::BelongsTo,
+    items: Field::HasMany,
+    parent: Field::BelongsTo.with_options(class_name: "Category"),
+    children: Field::HasMany.with_options(class_name: "Category"),
+    ancestor_hierarchies: Field::HasMany.with_options(class_name: "CategoryHierarchy"),
+    self_and_ancestors: Field::HasMany.with_options(class_name: "Category"),
+    descendant_hierarchies: Field::HasMany.with_options(class_name: "CategoryHierarchy"),
+    self_and_descendants: Field::HasMany.with_options(class_name: "Category"),
     id: Field::Number,
     name: Field::String,
-    note: Field::Text,
+    parent_id: Field::Number,
+    sort_order: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    custom_fields: Field::String,
   }
 
   # COLLECTION_ATTRIBUTES
@@ -22,10 +30,10 @@ class ItemDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
-    :category,
-    :id,
-    :name,
-    :note,
+    :items,
+    :parent,
+    :children,
+    :ancestor_hierarchies,
   ]
 
   # SHOW_PAGE_ATTRIBUTES
@@ -36,15 +44,23 @@ class ItemDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
-    :category,
+    :items,
+    :parent,
+    :children,
+    :ancestor_hierarchies,
+    :self_and_ancestors,
+    :descendant_hierarchies,
+    :self_and_descendants,
     :name,
-    :note,
+    :parent_id,
+    :sort_order,
+    :custom_fields,
   ]
 
-  # Overwrite this method to customize how items are displayed
+  # Overwrite this method to customize how categories are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(item)
-  #   "Item ##{item.id}"
+  # def display_resource(category)
+  #   "Category ##{category.id}"
   # end
 end

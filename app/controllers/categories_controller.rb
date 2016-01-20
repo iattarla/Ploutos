@@ -10,6 +10,7 @@ class CategoriesController < ApplicationController
 	
 	def new
 		@category = Category.new	
+		@categories = Category.roots
 	end
 	def edit
 		
@@ -34,9 +35,7 @@ class CategoriesController < ApplicationController
 
 	def create
 	#	render plain: params[:items].inspect
-	
-		@category = Category.new(category_params)
-
+		@category = Category.new(create_params)
 
 		if @category.save
 	
@@ -46,11 +45,25 @@ class CategoriesController < ApplicationController
 		end
 	end
 
+	def get_leaves
+	
+		@class = params[:which]
+		@form = params[:form]
+		@categories = Category.find(params[:id]).children
+		respond_to do |format|
+			format.js
+    		end
+	end
+
   private
   def category_params
 	 params.require(:category).permit(:name, :parent_id)
 	
   end
 
-
+  def create_params
+	name = params.require(:category).permit(:name)
+	parent_id = params.require(:parent).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
+	return name.merge(Hash["parent_id" => parent_id ])
+  end
 end

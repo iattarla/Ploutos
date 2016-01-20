@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class ItemDashboard < Administrate::BaseDashboard
+class LocationDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -8,10 +8,17 @@ class ItemDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    category: Field::BelongsTo,
+    parent: Field::BelongsTo.with_options(class_name: "Location"),
+    children: Field::HasMany.with_options(class_name: "Location"),
+    ancestor_hierarchies: Field::HasMany.with_options(class_name: "LocationHierarchy"),
+    self_and_ancestors: Field::HasMany.with_options(class_name: "Location"),
+    descendant_hierarchies: Field::HasMany.with_options(class_name: "LocationHierarchy"),
+    self_and_descendants: Field::HasMany.with_options(class_name: "Location"),
     id: Field::Number,
     name: Field::String,
-    note: Field::Text,
+    code: Field::String,
+    parent_id: Field::Number,
+    sort_order: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
   }
@@ -22,10 +29,10 @@ class ItemDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
-    :category,
-    :id,
-    :name,
-    :note,
+    :parent,
+    :children,
+    :ancestor_hierarchies,
+    :self_and_ancestors,
   ]
 
   # SHOW_PAGE_ATTRIBUTES
@@ -36,15 +43,22 @@ class ItemDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
-    :category,
+    :parent,
+    :children,
+    :ancestor_hierarchies,
+    :self_and_ancestors,
+    :descendant_hierarchies,
+    :self_and_descendants,
     :name,
-    :note,
+    :code,
+    :parent_id,
+    :sort_order,
   ]
 
-  # Overwrite this method to customize how items are displayed
+  # Overwrite this method to customize how locations are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(item)
-  #   "Item ##{item.id}"
+  # def display_resource(location)
+  #   "Location ##{location.id}"
   # end
 end
