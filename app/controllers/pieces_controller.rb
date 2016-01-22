@@ -1,5 +1,8 @@
 class PiecesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :verify_is_moderator
   before_action :set_piece, only: [:show, :edit, :update, :destroy]
+
 
   # GET /pieces
   # GET /pieces.json
