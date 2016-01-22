@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Pieces</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Guarantee start</th>
+      <th>Guarantee expiry</th>
+      <th>Notes</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pieces.each do |piece| %>
+      <tr>
+        <td><%= piece.guarantee_start %></td>
+        <td><%= piece.guarantee_expiry %></td>
+        <td><%= piece.notes %></td>
+        <td><%= piece.status %></td>
+        <td><%= link_to 'Show', piece %></td>
+        <td><%= link_to 'Edit', edit_piece_path(piece) %></td>
+        <td><%= link_to 'Destroy', piece, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Piece', new_piece_path %>

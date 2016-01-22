@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Guarantee start:</strong>
+  <%= @piece.guarantee_start %>
+</p>
+
+<p>
+  <strong>Guarantee expiry:</strong>
+  <%= @piece.guarantee_expiry %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @piece.notes %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @piece.status %>
+</p>
+
+<%= link_to 'Edit', edit_piece_path(@piece) %> |
+<%= link_to 'Back', pieces_path %>

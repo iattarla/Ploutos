@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :pieces
   resources :locations
   namespace :admin do
     DashboardManifest::DASHBOARDS.each do |dashboard_resource|

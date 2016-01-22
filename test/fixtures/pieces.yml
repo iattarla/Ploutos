@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  guarantee_start: 2016-01-22 02:05:58
+  guarantee_expiry: 2016-01-22 02:05:58
+  notes: MyText
+  status: false
+
+two:
+  guarantee_start: 2016-01-22 02:05:58
+  guarantee_expiry: 2016-01-22 02:05:58
+  notes: MyText
+  status: false
