@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   
   resources :categories
-  get 'category_leaves' => 'categories#get_leaves', :as => 'categories_leaves'
+  get 'children_category' => 'children#get', :as => 'children_category'
   resources :items
   # Example resource route with options:
   #   resources :products do

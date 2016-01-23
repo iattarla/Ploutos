@@ -37,7 +37,7 @@
 $(document).ready( function() {
     $('#C1').change(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
 	data: {
 		id : $('#C1 option:selected').val(),
 		which : "C1",
@@ -48,7 +48,7 @@ $(document).ready( function() {
     });
     $('#C2').change(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
         data: {
 		id : $('#C2 option:selected').val(),
 		which : "C2",
@@ -59,7 +59,7 @@ $(document).ready( function() {
     });
     $('#C3').change(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
         data: {
 		id : $('#C3 option:selected').val(),
 		which : "C3",
@@ -70,7 +70,7 @@ $(document).ready( function() {
     });
     $('#C4').change(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
         data: {
          	id : $('#C4 option:selected').val(),
 	 	which : "C4",

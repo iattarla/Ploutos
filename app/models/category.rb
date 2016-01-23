@@ -1,6 +1,7 @@
 class Category < ActiveRecord::Base
 
 	has_many :items
+	has_many :pieces, :through => :items
 	has_closure_tree
 
 store :custom_fields

@@ -11,7 +11,7 @@
 		<tr>
 			<td><%= item.name %></td>
 			<td><%= item.note %></td>
-			<td><%= item.category.name %></td>
+			<td><%= item.try(:category).try(:name) %></td>
 			<td><%= link_to 'Show', item_path(item) %></td> 
 			<td><%= link_to 'Edit', edit_item_path(item) %></td>
 			<td><%= link_to 'Destroy', item_path(item), method: :delete, data: { confirm: 'Are you sure?'} %></td>

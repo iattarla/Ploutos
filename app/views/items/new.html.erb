@@ -1,6 +1,5 @@
 <h1>New Article</h1>
 
-
 <%= form_for :item, url: items_path do |f| %>
       
 	<% if @item.errors.any? %>
@@ -41,49 +40,52 @@
 	</p>
 <% end %>
 
-
 <script>
 $(document).ready( function() {
     $('#C1').click(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
 	data: {
 		id : $('#C1 option:selected').val(),
 		which : "C1",
-		form : "item"
+		form : "item",
+		action: "<%= params[:action] %>"
 	},
         dataType: "script"
 	});
     });
     $('#C2').click(function() {
 	$.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
         data: {
 		id : $('#C2 option:selected').val(),
 		which : "C2",
-		form : "item"
+		form : "item",
+		action: "<%= params[:action] %>"
         },
         dataType: "script"
       });
     });
     $('#C3').click(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
         data: {
 		id : $('#C3 option:selected').val(),
 		which : "C3",
-		form : "item"
+		form : "item",
+		action: "<%= params[:action] %>" 	
         },
         dataType: "script"
       });
     });
     $('#C4').click(function() {
       $.ajax({
-        url: "<%= categories_leaves_path %>",
+        url: "<%= children_category_path %>",
         data: {
           	id : $('#C4 option:selected').val(),
 	  	which : "C4",
-	  	form : "item"
+	  	form : "item",
+		action: "<%= params[:action] %>"	
 	  },
         dataType: "script"
       });

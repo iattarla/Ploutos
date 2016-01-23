@@ -12,15 +12,30 @@ class CategoriesController < ApplicationController
 		@category = Category.new	
 		@categories = Category.roots
 	end
+
+	def create
+	#	render plain: params[:items].inspect
+
+		@category = Category.new(create_params)
+
+		if @category.save
+	
+			redirect_to categories_path
+		else
+			render 'new'
+		end
+	end
+	
 	def edit
 		
 		@category = Category.find(params[:id])
+		@categories = Category.roots
 	end
 
 	def update
 		@category = Category.find(params[:id])
 
-		if @category.update(category_params)
+		if @category.update(create_params)
 			redirect_to categories_path
 		else
 			render 'edit'
@@ -33,27 +48,17 @@ class CategoriesController < ApplicationController
 		redirect_to categories_path
 	end
 
-	def create
-	#	render plain: params[:items].inspect
-		@category = Category.new(create_params)
 
-		if @category.save
-	
-			redirect_to categories_path
-		else
-			render 'new'
-		end
-	end
 
-	def get_leaves
-	
-		@class = params[:which]
-		@form = params[:form]
-		@categories = Category.find(params[:id]).children
-		respond_to do |format|
-			format.js
-    		end
-	end
+#	def get_leaves
+#	
+#		@class = params[:which]
+#		@form = params[:form]
+#		@categories = Category.find(params[:id]).children
+#		respond_to do |format|
+#			format.js
+#    		end
+#	end
 
   private
   def category_params

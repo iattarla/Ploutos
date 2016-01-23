@@ -1,34 +1,84 @@
 <h1>Editing article</h1>
  
-<%= form_for :category, url: category_path(@category), method: :patch do |f| %>
- 
-  <% if @category.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@category.errors.count, "error") %> prohibited this article from being saved:
-      </h2>
-      <ul>
-        <% @category.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
- 
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </p>
- 
-  <p>
-    <%= f.label :parent_id %><br>
-    <%= f.text_field :parent_id %>
-  </p>
- 
-  <p>
-    <%= f.submit %>
-  </p>
- 
+<%= form_for :category do |f| %>
+      
+	<% if @category.errors.any? %>
+		<div id = "error_explanation">
+			<h2>
+				<%= pluralize(@category.errors.count, "error") %>
+				prohibited thiis article from being saved:
+
+			</h2>
+			<ul>
+				<% @category.errors.full_messages.each do |msg| %>
+					<li><%=msg%>
+				</li>
+				<% end %>
+			</ul>
+		</div>
+	<%end %>
+	
+	<p>
+		<%= f.label :name %><br>
+		<%= f.text_field :name %>
+	</p>
+	Category 1: <%= f.collection_select(:parent_id, @categories, :id, :name,  {:include_blank => 'No Parent'}, { :id => 'C1', name: 'parent[id1]' } ) %><br />
+	Category 2: <%= f.collection_select(:parent_id, @categories, :id, :name,  {:include_blank => 'No Parent'}, { :id => 'C2', name: 'parent[id2]' } ) %><br />
+	Category 3: <%= f.collection_select(:parent_id, @categories, :id, :name,  {:include_blank => 'No Parent'}, { :id => 'C3', name: 'parent[id3]' } ) %><br />
+	Category 4: <%= f.collection_select(:parent_id, @categories, :id, :name,  {:include_blank => 'No Parent'}, { :id => 'C4', name: 'parent[id4]' } ) %><br />
+	Category 5: <%= f.collection_select(:parent_id, @categories, :id, :name,  {:include_blank => 'No Parent'}, { :id => 'C5', name: 'parent[id5]' } ) %><br />
+      
+	<p>
+		<%= f.submit %>
+	</p>
 <% end %>
- 
+
+<script>
+$(document).ready( function() {
+    $('#C1').change(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+	data: {
+		id : $('#C1 option:selected').val(),
+		which : "C1",
+		form : "categories"
+		},
+        dataType: "script"
+	});
+    });
+    $('#C2').change(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+		id : $('#C2 option:selected').val(),
+		which : "C2",
+		form : "categories"
+        },
+        dataType: "script"
+      });
+    });
+    $('#C3').change(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+		id : $('#C3 option:selected').val(),
+		which : "C3",
+		form : "categories"
+        },
+        dataType: "script"
+      });
+    });
+    $('#C4').change(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+         	id : $('#C4 option:selected').val(),
+	 	which : "C4",
+		form : "categories"
+	  },
+        dataType: "script"
+      });
+    }); 
+});
+</script>
 <%= link_to 'Back', categories_path %>

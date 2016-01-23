@@ -30,12 +30,13 @@ class ItemsController < ApplicationController
 	def edit
 		
 		@item = Item.find(params[:id])
+		@categories = Category.roots
 	end
 
 	def update
 		@item = Item.find(params[:id])
 
-		if @item.update(item_params)
+		if @item.update(create_params)
 			redirect_to @item
 		else
 			render 'edit'
@@ -63,7 +64,6 @@ class ItemsController < ApplicationController
   def create_params
 	data = params.require(:item).permit(:name, :note)
 	category_id = params.require(:category).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
-	p category_id
 	return data.merge(Hash["category_id" => category_id ])
   end
 

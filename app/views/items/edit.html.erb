@@ -1,34 +1,92 @@
 <h1>Editing article</h1>
+
+<%= form_for :item, url: items_path do |f| %>
+      
+	<% if @item.errors.any? %>
+		<div id = "error_explanation">
+			<h2>
+				<%= pluralize(@item.errors.count, "error") %>
+				prohibited thiis article from being saved:
+
+			</h2>
+			<ul>
+				<% @item.errors.full_messages.each do |msg| %>
+					<li><%=msg%>
+				</li>
+				<% end %>
+			</ul>
+		</div>
+	<%end %>
+	
+	<p>
+		<%= f.label :name %><br>
+		<%= f.text_field :name %>
+	</p>
+    
+	<p>
+		<%= f.label :note %><br>
+		<%= f.text_area :note %>
+	</p>
+	Category 1: <%= f.collection_select(:category_id, @categories, :id, :name, {}, { :id => 'C1', name: 'category[id1]' } ) %><br />
+	Category 2: <%= f.collection_select(:category_id, @categories, :id, :name, {}, { :id => 'C2', name: 'category[id2]' } ) %><br />
+	Category 3: <%= f.collection_select(:category_id, @categories, :id, :name, {}, { :id => 'C3', name: 'category[id3]' } ) %><br />
+	Category 4: <%= f.collection_select(:category_id, @categories, :id, :name, {}, { :id => 'C4', name: 'category[id4]' } ) %><br />
+	Category 5: <%= f.collection_select(:category_id, @categories, :id, :name, {}, { :id => 'C5', name: 'category[id5]' } ) %><br />
+      
  
-<%= form_for :item, url: item_path(@item), method: :patch do |f| %>
- 
-  <% if @item.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@item.errors.count, "error") %> prohibited this article from being saved:
-      </h2>
-      <ul>
-        <% @item.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
- 
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </p>
- 
-  <p>
-    <%= f.label :note %><br>
-    <%= f.text_area :note %>
-  </p>
- 
-  <p>
-    <%= f.submit %>
-  </p>
- 
+      
+	<p>
+		<%= f.submit %>
+	</p>
 <% end %>
- 
+
+<script>
+$(document).ready( function() {
+    $('#C1').click(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+	data: {
+		id : $('#C1 option:selected').val(),
+		which : "C1",
+		form : "item"
+	},
+        dataType: "script"
+	});
+    });
+    $('#C2').click(function() {
+	$.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+		id : $('#C2 option:selected').val(),
+		which : "C2",
+		form : "item"
+        },
+        dataType: "script"
+      });
+    });
+    $('#C3').click(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+		id : $('#C3 option:selected').val(),
+		which : "C3",
+		form : "item"
+        },
+        dataType: "script"
+      });
+    });
+    $('#C4').click(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+          	id : $('#C4 option:selected').val(),
+	  	which : "C4",
+	  	form : "item"
+	  },
+        dataType: "script"
+      });
+    }); 
+});
+</script>
+
 <%= link_to 'Back', item_path %>

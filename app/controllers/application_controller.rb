@@ -6,9 +6,12 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def verify_is_moderator
+
+	def verify_is_moderator
 	  (current_user.nil?) ? redirect_to(root_path) : (redirect_to(root_path) unless current_user.try(:moderator?))
-  end
+	end
+
+
 
 
 end

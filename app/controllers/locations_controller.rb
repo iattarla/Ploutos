@@ -22,6 +22,7 @@ class LocationsController < ApplicationController
 
   # GET /locations/1/edit
   def edit
+    @locations = Location.roots
   end
 
   # POST /locations
@@ -43,6 +44,7 @@ class LocationsController < ApplicationController
   # PATCH/PUT /locations/1
   # PATCH/PUT /locations/1.json
   def update
+	  puts params
     respond_to do |format|
       if @location.update(location_params)
         format.html { redirect_to @location, notice: 'Location was successfully updated.' }
