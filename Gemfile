@@ -14,6 +14,17 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+gem "therubyracer"
+gem "less-rails"
+gem "twitter-bootstrap-rails"
+
+#datetime picker
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+
+#bootstrap switch
+gem "bootstrap-switch-rails"
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -34,6 +45,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # User Authentication
 gem 'devise'
+gem 'devise-bootstrap-views'
 
 # Admin
 gem "administrate", "~> 0.1.2"
@@ -57,4 +69,3 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-

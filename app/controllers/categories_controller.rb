@@ -7,27 +7,26 @@ class CategoriesController < ApplicationController
 		@categories = Category.all
 	end
 
-	
+
 	def new
-		@category = Category.new	
+		@category = Category.new
 		@categories = Category.roots
 	end
 
 	def create
-	#	render plain: params[:items].inspect
-
+		
 		@category = Category.new(create_params)
 
 		if @category.save
-	
+
 			redirect_to categories_path
 		else
 			render 'new'
 		end
 	end
-	
+
 	def edit
-		
+
 		@category = Category.find(params[:id])
 		@categories = Category.roots
 	end
@@ -41,7 +40,7 @@ class CategoriesController < ApplicationController
 			render 'edit'
 		end
 	end
-	
+
 	def destroy
 		@category = Category.find(params[:id])
 		@category.destroy
@@ -51,7 +50,7 @@ class CategoriesController < ApplicationController
 
 
 #	def get_leaves
-#	
+#
 #		@class = params[:which]
 #		@form = params[:form]
 #		@categories = Category.find(params[:id]).children
@@ -63,7 +62,7 @@ class CategoriesController < ApplicationController
   private
   def category_params
 	 params.require(:category).permit(:name, :parent_id)
-	
+
   end
 
   def create_params

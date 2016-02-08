@@ -1,6 +1,7 @@
 class Item < ActiveRecord::Base
 
 	belongs_to :category
+	belongs_to :unit
 	has_many :pieces
 
 	validates :name, presence: true,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160123015641) do
+ActiveRecord::Schema.define(version: 20160208080756) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",          limit: 255,  null: false
@@ -32,18 +32,22 @@ ActiveRecord::Schema.define(version: 20160123015641) do
   add_index "category_hierarchies", ["descendant_id"], name: "category_desc_idx", using: :btree
 
   create_table "items", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.text     "note",        limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "category_id", limit: 4
-    t.string   "brand",       limit: 255
-    t.string   "model",       limit: 255
-    t.string   "unit",        limit: 255
-    t.string   "serial_no",   limit: 255
+    t.string   "name",          limit: 255
+    t.text     "description",   limit: 65535
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "category_id",   limit: 4
+    t.string   "brand",         limit: 255
+    t.string   "model",         limit: 255
+    t.string   "serial_no",     limit: 255
+    t.integer  "unit_id",       limit: 4
+    t.integer  "quantity",      limit: 4
+    t.decimal  "price",                       precision: 10
+    t.datetime "delivery_date"
   end
 
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+  add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
 
   create_table "location_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id",   limit: 4, null: false
@@ -73,11 +77,20 @@ ActiveRecord::Schema.define(version: 20160123015641) do
     t.integer  "item_id",          limit: 4
     t.integer  "user_id",          limit: 4
     t.integer  "location_id",      limit: 4
+    t.datetime "delivery_date"
+    t.string   "serial_no",        limit: 255
   end
 
   add_index "pieces", ["item_id"], name: "index_pieces_on_item_id", using: :btree
   add_index "pieces", ["location_id"], name: "index_pieces_on_location_id", using: :btree
   add_index "pieces", ["user_id"], name: "index_pieces_on_user_id", using: :btree
+
+  create_table "units", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "abbr",       limit: 255
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "",    null: false
@@ -101,11 +114,13 @@ ActiveRecord::Schema.define(version: 20160123015641) do
     t.datetime "updated_at",                                         null: false
     t.boolean  "admin",                              default: false
     t.boolean  "moderator",                          default: false
+    t.string   "username",               limit: 255
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

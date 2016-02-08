@@ -1,33 +1,50 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Pieces</h1>
-
-<table>
+<%- model_class = Piece -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Guarantee start</th>
-      <th>Guarantee expiry</th>
-      <th>Notes</th>
-      <th>Status</th>
-      <th colspan="3"></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%= model_class.human_attribute_name(:serial_no) %></th>
+      <th><%= model_class.human_attribute_name(:guarantee_start) %></th>
+      <th><%= model_class.human_attribute_name(:guarantee_expiry) %></th>
+      <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <th><%= model_class.human_attribute_name(:location_id) %></th>
+      <th><%= model_class.human_attribute_name(:delivery_date) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
   <tbody>
     <% @pieces.each do |piece| %>
       <tr>
+        <td><%= link_to piece.id, item_piece_path(@item, piece) %></td>
+        <% if piece.status %>
+        <td><i class="fa fa-check-circle-o text-success fa-lg"></i></td>
+        <% else %>
+        <td><i class="fa fa-exclamation-triangle text-danger fa-lg"></i></td>
+        <% end %>
+        <td><%= piece.serial_no %></td>
         <td><%= piece.guarantee_start %></td>
         <td><%= piece.guarantee_expiry %></td>
-        <td><%= piece.notes %></td>
-        <td><%= piece.status %></td>
-        <td><%= link_to 'Show', piece %></td>
-        <td><%= link_to 'Edit', edit_piece_path(piece) %></td>
-        <td><%= link_to 'Destroy', piece, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= piece.user_id %></td>
+        <td><%= piece.location_id %></td>
+        <td><%= piece.delivery_date %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_item_piece_path(@item, piece), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      item_piece_path(@item,piece),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Piece', new_piece_path %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_item_piece_path,
+            :class => 'btn btn-primary' %>

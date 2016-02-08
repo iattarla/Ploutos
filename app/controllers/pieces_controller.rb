@@ -1,37 +1,49 @@
 class PiecesController < ApplicationController
   before_action :authenticate_user!
-  before_action :verify_is_moderator
   before_action :set_piece, only: [:show, :edit, :update, :destroy]
 
 
   # GET /pieces
   # GET /pieces.json
   def index
-    @pieces = Piece.all
+    @item = Item.find(params[:item_id])
+    @pieces = @item.pieces
   end
 
   # GET /pieces/1
   # GET /pieces/1.json
   def show
+    @item = Item.find(params[:item_id])
+    @piece = @item.pieces.find(params[:id])
+    @qr = RQRCode::QRCode.new(@piece.serial_no).to_img.resize(200, 200).to_data_url
   end
 
   # GET /pieces/new
   def new
-    @piece = Piece.new
+	  @item = Item.find(params[:item_id])
+	  @piece = Piece.new(:item => @item)
+    @users = User.all
+    @locations = Location.all
   end
 
   # GET /pieces/1/edit
   def edit
+    @item = Item.find(params[:item_id])
+    @piece = @item.pieces.find(params[:id])
+    @users = User.all
+    @locations = Location.all
+
   end
 
   # POST /pieces
   # POST /pieces.json
   def create
-    @piece = Piece.new(piece_params)
+    @item = Item.find(params[:item_id])
+    @piece = @item.pieces.create(piece_params)
 
     respond_to do |format|
       if @piece.save
-        format.html { redirect_to @piece, notice: 'Piece was successfully created.' }
+        format.html { redirect_to([@item, @piece], notice: 'Piece was successfully created.') }
         format.json { render :show, status: :created, location: @piece }
       else
         format.html { render :new }
@@ -43,9 +55,13 @@ class PiecesController < ApplicationController
   # PATCH/PUT /pieces/1
   # PATCH/PUT /pieces/1.json
   def update
+    @item = Item.find(params[:item_id])
+    @piece = @item.pieces.find(params[:id])
+
+
     respond_to do |format|
       if @piece.update(piece_params)
-        format.html { redirect_to @piece, notice: 'Piece was successfully updated.' }
+        format.html { redirect_to([@item, @piece], notice: 'Piece was successfully updated.') }
         format.json { render :show, status: :ok, location: @piece }
       else
         format.html { render :edit }
@@ -59,7 +75,7 @@ class PiecesController < ApplicationController
   def destroy
     @piece.destroy
     respond_to do |format|
-      format.html { redirect_to pieces_url, notice: 'Piece was successfully destroyed.' }
+      format.html { redirect_to item_pieces_url, notice: 'Piece was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -72,6 +88,6 @@ class PiecesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def piece_params
-      params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :notes, :status)
+      params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :notes, :status, :user_id, :location_id)
     end
 end

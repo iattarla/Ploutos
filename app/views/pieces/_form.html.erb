@@ -1,33 +1,104 @@
-<%= form_for(@piece) do |f| %>
-  <% if @piece.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@piece.errors.count, "error") %> prohibited this piece from being saved:</h2>
+<%= form_for ([@item, @piece]), :html => { :class => "form-horizontal piece" } do |f| %>
 
-      <ul>
-      <% @piece.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <% if @piece.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@piece.errors.count, "error") %> prohibited this piece from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @piece.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :guarantee_start %><br>
-    <%= f.datetime_select :guarantee_start %>
+  <div class="form-group">
+    <%= f.label :guarantee_start, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-5">
+      <div class='input-group date' id='dtpicker_start'>
+        <%= f.text_field :guarantee_start, :class => 'form-control col-lg-5' %>
+      <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+      </div>
+    </div>
+    <%=f.error_span(:guarantee_start) %>
   </div>
-  <div class="field">
-    <%= f.label :guarantee_expiry %><br>
-    <%= f.datetime_select :guarantee_expiry %>
+
+  <div class="form-group">
+    <%= f.label :guarantee_expiry, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-5">
+      <div class='input-group date' id='dtpicker_expiry'>
+        <%= f.text_field :guarantee_expiry, :class => 'form-control col-lg-5' %>
+        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+      </div>
+    <%=f.error_span(:guarantee_expiry) %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :notes %><br>
-    <%= f.text_area :notes %>
+
+  <div class="form-group">
+    <%= f.label :notes, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_area :notes, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:notes) %>
   </div>
-  <div class="field">
-    <%= f.label :status %><br>
-    <%= f.check_box :status %>
+  <div class="form-group">
+    <%= f.label :status, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.check_box :status, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:status) %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-group">
+    <%= f.label :user_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.collection_select(:user_id, @users, :id, :username, {}, { class: 'form-control'}) %>
+    </div>
+    <%=f.error_span(:user_id) %>
   </div>
+  <div class="form-group">
+    <%= f.label :location_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.collection_select(:location_id, @locations, :id, :name, {},  { class: 'form-control'} ) %>
+    </div>
+    <%=f.error_span(:location_id) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                item_pieces_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+
 <% end %>
+
+<script type="text/javascript">
+    $(function () {
+        $('#dtpicker_start').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY'
+        });
+        $('#dtpicker_expiry').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY',
+            useCurrent: false
+        });
+        $("#dtpicker_start").on("dp.change", function (e) {
+            $('#dtpicker_expiry').data("DateTimePicker").minDate(e.date);
+        });
+        $("#dtpicker_expiry").on("dp.change", function (e) {
+            $('#dtpicker_start').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+    $("[id='piece_status']").bootstrapSwitch({
+      onText: 'In Use',
+      onColor: 'success',
+      offText: 'Out of Use',
+      offColor: 'danger',
+      indeterminate: true
+    });
+</script>

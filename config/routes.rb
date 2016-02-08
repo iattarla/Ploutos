@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :pieces
+  resources :units
   resources :locations
   namespace :admin do
     DashboardManifest::DASHBOARDS.each do |dashboard_resource|
@@ -27,7 +27,9 @@ Rails.application.routes.draw do
   
   resources :categories
   get 'children_category' => 'children#get', :as => 'children_category'
-  resources :items
+  resources :items do
+	  resources :pieces
+  end
   # Example resource route with options:
   #   resources :products do
   #     member do
