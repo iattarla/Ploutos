@@ -20,8 +20,8 @@ class PiecesController < ApplicationController
 
   # GET /pieces/new
   def new
-	  @item = Item.find(params[:item_id])
-	  @piece = Piece.new(:item => @item)
+    @item = Item.find(params[:item_id])
+    @piece = Piece.new(:item => @item)
     @users = User.all
     @locations = Location.all
   end
@@ -39,16 +39,32 @@ class PiecesController < ApplicationController
   # POST /pieces.json
   def create
     @item = Item.find(params[:item_id])
-    @piece = @item.pieces.create(piece_params)
+    @error = false	
+    @users = User.all
+    @locations = Location.all
 
+    params[:piece][:quantity].to_i.times do
+
+ 	@piece = @item.pieces.create(piece_params)
+
+ 		if @piece.save
+ 			@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
+ 		else
+ 			@error=true
+       		end
+    end
+
+	
     respond_to do |format|
-      if @piece.save
-        format.html { redirect_to([@item, @piece], notice: 'Piece was successfully created.') }
-        format.json { render :show, status: :created, location: @piece }
-      else
-        format.html { render :new }
-        format.json { render json: @piece.errors, status: :unprocessable_entity }
-      end
+
+	if !@error
+		format.html { redirect_to([@item, @piece], notice: 'Piece was successfully created.') }
+       		format.json { render :show, status: :created, location: @piece }
+	else
+		format.html { render :new }
+        	format.json { render json: @piece.errors, status: :unprocessable_entity }
+	end
+
     end
   end
 

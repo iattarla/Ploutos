@@ -32,7 +32,7 @@
   <div class="form-group">
     <%= f.label :parent_id, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.collection_select(:parent_id, @locations, :id, :name, {}, { class: 'form-control' }) %>
+      <%= f.collection_select(:parent_id, @locations, :id, :name, { include_blank: 'No Parent' }, { class: 'form-control' }) %>
     </div>
     <%=f.error_span(:parent_id) %>
   </div>

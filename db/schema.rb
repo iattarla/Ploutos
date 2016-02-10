@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160208080756) do
+ActiveRecord::Schema.define(version: 20160209090822) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",          limit: 255,  null: false
@@ -44,9 +44,11 @@ ActiveRecord::Schema.define(version: 20160208080756) do
     t.integer  "quantity",      limit: 4
     t.decimal  "price",                       precision: 10
     t.datetime "delivery_date"
+    t.integer  "location_id",   limit: 4
   end
 
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+  add_index "items", ["location_id"], name: "index_items_on_location_id", using: :btree
   add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
 
   create_table "location_hierarchies", id: false, force: :cascade do |t|

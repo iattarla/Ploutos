@@ -10,7 +10,6 @@
       <th><%= model_class.human_attribute_name(:serial_no) %></th>
       <th><%= model_class.human_attribute_name(:guarantee_start) %></th>
       <th><%= model_class.human_attribute_name(:guarantee_expiry) %></th>
-      <th><%= model_class.human_attribute_name(:user_id) %></th>
       <th><%= model_class.human_attribute_name(:location_id) %></th>
       <th><%= model_class.human_attribute_name(:delivery_date) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -28,8 +27,7 @@
         <td><%= piece.serial_no %></td>
         <td><%= piece.guarantee_start %></td>
         <td><%= piece.guarantee_expiry %></td>
-        <td><%= piece.user_id %></td>
-        <td><%= piece.location_id %></td>
+        <td><%= piece.try(:location).try(:name) %></td>
         <td><%= piece.delivery_date %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

@@ -16,6 +16,8 @@ class ItemsController < ApplicationController
 		@categories = Category.roots
 
 		@units = Unit.all
+		
+		@locations = Location.all
 
 	end
 
@@ -27,17 +29,19 @@ class ItemsController < ApplicationController
 		@item = Item.new(create_params)
 
 		if @item.save
-			@item.update_columns(serial_no: @serial_no +"-"+	 @item.id.to_s)
+			@item.update_columns(serial_no: @serial_no +"-"+ @item.id.to_s)
 
 			if (params[:serial_no][:type] == "D")
 				params[:item][:quantity].to_i.times do
 					@piece = @item.pieces.build
 					@piece.save
-					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s)
+					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s, location_id: @item.location_id)
 				end
 			elsif (params[:serial_no][:type] == "C")
-					@piece = @item.pieces.build()
+					@piece = @item.pieces.build
 					@piece.save
+					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s, location_id: @item.location_id)
+
 			end
 
 			redirect_to @item
@@ -58,12 +62,19 @@ class ItemsController < ApplicationController
 
 		@units = Unit.all
 
+		@locations = Location.all
 	end
 
 	def update
 
 		@item = Item.find(params[:id])
 
+		@categories = Category.roots
+
+		@units = Unit.all
+		
+		@locations = Location.all
+		
 		if @item.update(create_params)
 
 			redirect_to @item
@@ -98,9 +109,9 @@ class ItemsController < ApplicationController
 
   private
 
-  def create_params
+	def create_params
 
-		data = params.require(:item).permit(:name, :description, :brand, :model, :quantity, :unit_id, :price, :delivery_date)
+		data = params.require(:item).permit(:name, :description, :brand, :model, :quantity, :unit_id, :price, :delivery_date, :location_id)
 
 		category_id = params.require(:category).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
 

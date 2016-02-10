@@ -67,12 +67,21 @@
   </div>
 
   <div class="form-group">
+    <%= f.label "Quantity", :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= number_field_tag "quantity", "1", class: 'form-control', name: 'piece[quantity]' %>
+    </div>
+    <%=f.error_span(:notes) %>
+  </div>
+
+  <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
       <%= f.submit nil, :class => 'btn btn-primary' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 item_pieces_path, :class => 'btn btn-default' %>
     </div>
   </div>
+
 
 <% end %>
 
