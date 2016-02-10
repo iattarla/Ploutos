@@ -24,6 +24,8 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
 #bootstrap switch
 gem "bootstrap-switch-rails"
+#will paginate
+gem 'will_paginate-bootstrap'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

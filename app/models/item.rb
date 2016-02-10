@@ -6,7 +6,7 @@ class Item < ActiveRecord::Base
 	has_many :pieces
 
 	validates :name, presence: true,
-			length: { minimum: 3} 
-	
+			length: { minimum: 3}
 
+	self.per_page = 10
 end

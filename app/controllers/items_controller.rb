@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
 
 
 	def index
-		@items = Item.all
+		@items = Item.order('created_at DESC').page(params[:page])
 	end
 
 
@@ -16,7 +16,7 @@ class ItemsController < ApplicationController
 		@categories = Category.roots
 
 		@units = Unit.all
-		
+
 		@locations = Location.all
 
 	end
@@ -72,9 +72,9 @@ class ItemsController < ApplicationController
 		@categories = Category.roots
 
 		@units = Unit.all
-		
+
 		@locations = Location.all
-		
+
 		if @item.update(create_params)
 
 			redirect_to @item

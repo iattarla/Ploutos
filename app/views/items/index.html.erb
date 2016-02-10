@@ -28,7 +28,7 @@
         <td><%= item.brand %></td>
         <td><%= item.model %></td>
         <td><%= item.serial_no %></td>
-	<% if item.serial_no.start_with?("D") %>       
+	<% if item.serial_no.start_with?("D") %>
 	<td><%= item.pieces.count %> <%= item.unit.name %></td>
 	<% else %>
 	<td><%= item.quantity %> <%= item.unit.name %></td>
@@ -54,3 +54,5 @@
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_item_path,
             :class => 'btn btn-primary' %>
+<br>
+<%= will_paginate @items, renderer: BootstrapPagination::Rails %>
