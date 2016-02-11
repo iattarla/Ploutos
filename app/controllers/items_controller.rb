@@ -6,6 +6,7 @@ class ItemsController < ApplicationController
 
 	def index
 		@items = Item.order('created_at DESC').page(params[:page])
+		@categories = Category.roots
 	end
 
 

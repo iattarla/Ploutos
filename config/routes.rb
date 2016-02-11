@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   resources :units
-  resources :locations
+
   namespace :admin do
     DashboardManifest::DASHBOARDS.each do |dashboard_resource|
       resources dashboard_resource
@@ -24,8 +24,14 @@ Rails.application.routes.draw do
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
-  
+
   resources :categories
+  get 'categories/:id/items', to: 'categories#items', :as => 'category_items'
+  post 'categories/items', to: 'categories#set_item', :as => 'set_category_items'
+
+  resources :locations
+  get 'locations/:id/items', to: 'locations#items'
+
   get 'children_category' => 'children#get', :as => 'children_category'
   resources :items do
 	  resources :pieces

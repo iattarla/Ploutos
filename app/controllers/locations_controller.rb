@@ -1,12 +1,12 @@
 class LocationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :verify_is_moderator
+  before_action :verify_is_moderator, :except => [:items]
   before_action :set_location, only: [:show, :edit, :update, :destroy]
 
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.all
+    @locations = Location.order('created_at DESC').page(params[:page])
   end
 
   # GET /locations/1
@@ -64,6 +64,11 @@ class LocationsController < ApplicationController
       format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def items
+  #  @location = Location.find(params[:id])
+	#	@items = @location.items.order('created_at DESC').page(params[:page])
   end
 
   private

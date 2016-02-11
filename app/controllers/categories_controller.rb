@@ -1,10 +1,10 @@
 class CategoriesController < ApplicationController
 
 	before_action :authenticate_user!
-	before_action :verify_is_moderator
+	before_action :verify_is_moderator, :except => [:items]
 
 	def index
-		@categories = Category.all
+		@categories = Category.order('created_at DESC').page(params[:page])
 	end
 
 
@@ -14,7 +14,7 @@ class CategoriesController < ApplicationController
 	end
 
 	def create
-		
+
 		@category = Category.new(create_params)
 
 		if @category.save
@@ -47,7 +47,22 @@ class CategoriesController < ApplicationController
 		redirect_to categories_path
 	end
 
+	def show
+		@category = Category.find(params[:id])
+	end
 
+	def items
+		@category = Category.find(params[:id])
+		@items = @category.items.order('created_at DESC').page(params[:page])
+	end
+
+	def set_item
+		parent_id = set_item_params
+
+		@category = Category.find(parent_id)
+
+		redirect_to category_items_path(@category)
+	end
 
 #	def get_leaves
 #
@@ -70,6 +85,11 @@ class CategoriesController < ApplicationController
 	parent_id = params.require(:parent).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
 	return name.merge(Hash["parent_id" => parent_id ])
   end
+
+	def set_item_params
+		return params.require(:category).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
+	end
+
 
 
 end

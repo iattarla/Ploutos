@@ -1,0 +1,100 @@
+<%= form_tag(set_category_items_path, :method => "post", :class => "form-horizontal category_items") do %>
+
+
+  <div class="form-group">
+    <%= label_tag :category_id, "Selected Category Items ", :class => 'control-label col-lg-2' %>
+    <div class="col-lg-8">
+    <div class="input-group">
+	<span class="input-group-addon">1</span>
+	  <%= collection_select(:category, :category_id, @categories, :id, :name, {}, { :id => 'C1', name: 'category[id1]', class: 'form-control'}) %>
+    </div>
+
+    <div class="input-group">
+	<span class="input-group-addon">2</span>
+    <%= collection_select(:category, :category_id, @categories, :id, :name, {}, { :id => 'C2', name: 'category[id2]', class: 'form-control'}) %>
+
+    </div>
+    <div class="input-group">
+	<span class="input-group-addon">3</span>
+    <%= collection_select(:category, :category_id, @categories, :id, :name, {}, { :id => 'C3', name: 'category[id3]', class: 'form-control'}) %>
+
+    </div>
+    <div class="input-group">
+	<span class="input-group-addon">4</span>
+    <%= collection_select(:category, :category_id, @categories, :id, :name, {}, { :id => 'C4', name: 'category[id4]', class: 'form-control'}) %>
+
+    </div>
+    <div class="input-group">
+	<span class="input-group-addon">5</span>
+    <%= collection_select(:category, :category_id, @categories, :id, :name, {}, { :id => 'C5', name: 'category[id5]', class: 'form-control'}) %>
+    </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-8">
+      <%= submit_tag nil, :class => 'btn btn-primary' %>
+    </div>
+  </div>
+
+<% end %>
+<script>
+$(document).ready( function() {
+    $('#C1').click(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+	data: {
+		id : $('#C1 option:selected').val(),
+		which : "C1",
+		form : "item",
+		action: "<%= params[:action] %>"
+	},
+        dataType: "script"
+	});
+    });
+    $('#C2').click(function() {
+	$.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+		id : $('#C2 option:selected').val(),
+		which : "C2",
+		form : "item",
+		action: "<%= params[:action] %>"
+        },
+        dataType: "script"
+      });
+    });
+    $('#C3').click(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+		id : $('#C3 option:selected').val(),
+		which : "C3",
+		form : "item",
+		action: "<%= params[:action] %>"
+        },
+        dataType: "script"
+      });
+    });
+    $('#C4').click(function() {
+      $.ajax({
+        url: "<%= children_category_path %>",
+        data: {
+          	id : $('#C4 option:selected').val(),
+	  	which : "C4",
+	  	form : "item",
+		action: "<%= params[:action] %>"
+	  },
+        dataType: "script"
+      });
+    });
+});
+
+$(function () {
+        $('#dtpicker_delivery').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY'
+        });
+    });
+
+</script>
