@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
 	before_action :verify_is_moderator, :except => [:items]
 
 	def index
-		@categories = Category.order('created_at DESC').page(params[:page])
+		@categories = Category.all
 	end
 
 

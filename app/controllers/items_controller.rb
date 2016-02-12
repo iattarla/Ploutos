@@ -41,7 +41,7 @@ class ItemsController < ApplicationController
 			elsif (params[:serial_no][:type] == "C")
 					@piece = @item.pieces.build
 					@piece.save
-					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s, location_id: @item.location_id)
+					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s, location_id: @item.location_id, quantity: @item.quantity)
 
 			end
 
@@ -101,6 +101,7 @@ class ItemsController < ApplicationController
 
 		@item = Item.find(params[:id])
 
+		@item.pieces.destroy
 		@item.destroy
 
 		redirect_to items_path

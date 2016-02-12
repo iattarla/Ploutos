@@ -65,7 +65,7 @@
     </div>
     <%=f.error_span(:location_id) %>
   </div>
-
+<% if @item.serial_no.start_with?("D") %>
   <div class="form-group">
     <%= f.label "Quantity", :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
@@ -73,7 +73,15 @@
     </div>
     <%=f.error_span(:notes) %>
   </div>
-
+<% else %>
+  <div class="form-group">
+    <%= f.label :quantity, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.number_field :quantity, :value => "1", class: 'form-control' %>
+    </div>
+    <%=f.error_span(:quantity) %>
+  </div>
+<% end %>
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
       <%= f.submit nil, :class => 'btn btn-primary' %>

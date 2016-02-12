@@ -43,17 +43,29 @@ class PiecesController < ApplicationController
     @users = User.all
     @locations = Location.all
 
-    params[:piece][:quantity].to_i.times do
+    if @item.serial_no.start_with?("D")
+    	params[:piece][:quantity].to_i.times do
 
- 	@piece = @item.pieces.create(piece_params)
+		@piece = @item.pieces.create(piece_params)
 
- 		if @piece.save
- 			@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
- 		else
- 			@error=true
+    	    	if @piece.save
+    	    		@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
+    	    	else
+    	    		@error=true
        		end
-    end
+    	end
+    else
 
+		@piece = @item.pieces.create(piece_params)
+
+		if @piece.save
+    	    		@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
+    	    	else
+    	    		@error=true
+    	   		end
+
+		
+    end
 	
     respond_to do |format|
 
@@ -104,6 +116,6 @@ class PiecesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def piece_params
-      params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :notes, :status, :user_id, :location_id)
+      params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :notes, :status, :user_id, :location_id, :quantity)
     end
 end
