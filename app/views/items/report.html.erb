@@ -1,0 +1,41 @@
+<%- model_class = Item -%>
+
+<% @categories.each do |category| %>
+ <% if category.pieces.count > 0 %>
+  <h3><%= category.ancestry_path.join(">>") %></h3>
+    <% category.items.each do |item| %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th><%= model_class.human_attribute_name(:serial_no) %></th>
+          <th><%= model_class.human_attribute_name(:name) %></th>
+          <th><%= model_class.human_attribute_name(:brand) %></th>
+          <th><%= model_class.human_attribute_name(:model) %></th>
+          <th><%= model_class.human_attribute_name(:quantity) %></th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td><%= item.serial_no %></td>
+    	      <td><%= item.name %></td>
+            <td><%= item.brand %></td>
+            <td><%= item.model %></td>
+
+    	<% if item.serial_no.start_with?("D") %>
+    	 <td><%= item.pieces.count %> <%= item.unit.name %></td>
+      <% else %>
+    	 <td><%= item.quantity %> <%= item.unit.name %></td>
+    	<% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+
+ <% end %>
+
+
+
+<% end %>

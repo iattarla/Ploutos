@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :reports
   resources :units
 
   namespace :admin do
@@ -36,6 +37,7 @@ Rails.application.routes.draw do
   resources :items do
 	  resources :pieces
   end
+  get 'report', to: 'items#report', :as => 'items_report'
   # Example resource route with options:
   #   resources :products do
   #     member do

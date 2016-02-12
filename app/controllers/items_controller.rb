@@ -108,6 +108,17 @@ class ItemsController < ApplicationController
 
 	end
 
+	def report
+		@categories = Category.all
+		@items = Item.all.sort_by &(:category_id)
+
+		respond_to do |format|
+  		format.html # show.html.erb
+			html = render_to_string(:action => 'report.html.erb', :layout => true)
+  		format.pdf { render :text => PDFKit.new(html).to_pdf }
+		end
+	end
+
 
   private
 
