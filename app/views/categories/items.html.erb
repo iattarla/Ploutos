@@ -3,6 +3,8 @@
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
 
+<% @categories.each do |category| %>
+<% next if category.items.empty? %>
 
 <table class="table table-striped">
   <thead>
@@ -20,11 +22,8 @@
     </tr>
   </thead>
     <tbody>
-<% @categories.each do |category| %>
-<% next if category.items.empty? %>
-
     <tr>
-      <th><h6><b>Category:</b> <%= category.ancestry_path.join(">>") %> <h6></tr>
+      <h5><b>Category:</b> <%= category.ancestry_path.join(">>") %> <h5>
     </tr>
       <% category.items.each do |item| %>
       <tr>
