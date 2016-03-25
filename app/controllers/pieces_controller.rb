@@ -1,6 +1,7 @@
 class PiecesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_piece, only: [:show, :edit, :update, :destroy]
+  before_action :set_searching
 
 
   # GET /pieces
@@ -39,7 +40,7 @@ class PiecesController < ApplicationController
   # POST /pieces.json
   def create
     @item = Item.find(params[:item_id])
-    @error = false	
+    @error = false
     @users = User.all
     @locations = Location.all
 
@@ -64,9 +65,9 @@ class PiecesController < ApplicationController
     	    		@error=true
     	   		end
 
-		
+
     end
-	
+
     respond_to do |format|
 
 	if !@error
@@ -118,4 +119,8 @@ class PiecesController < ApplicationController
     def piece_params
       params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :notes, :status, :user_id, :location_id, :quantity)
     end
+
+  	def set_searching
+  		@q = Item.ransack(params[:q])
+  	end
 end

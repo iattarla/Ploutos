@@ -16,6 +16,13 @@
   <% end %>
 
   <div class="form-group">
+      <%= f.label :serial_no, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :serial_no, :class => 'form-control' %>
+      </div>
+      <%=f.error_span(:serial_no) %>
+  </div>
+  <div class="form-group">
     <%= f.label :guarantee_start, :class => 'control-label col-lg-2' %>
     <div class="col-lg-5">
       <div class='input-group date' id='dtpicker_start'>
@@ -65,7 +72,7 @@
     </div>
     <%=f.error_span(:location_id) %>
   </div>
-<% if @item.serial_no.start_with?("D") %>
+<% if @item.kind == "D" %>
   <div class="form-group">
     <%= f.label "Quantity", :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
@@ -116,6 +123,5 @@
       onColor: 'success',
       offText: 'Out of Use',
       offColor: 'danger',
-      indeterminate: true
     });
 </script>

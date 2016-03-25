@@ -2,6 +2,8 @@ class CategoriesController < ApplicationController
 
 	before_action :authenticate_user!
 	before_action :verify_is_moderator, :except => [:items]
+	before_action :set_searching
+
 
 	def index
 		@categories = Category.all
@@ -53,7 +55,7 @@ class CategoriesController < ApplicationController
 
 	def items
 		@category = Category.find(params[:id])
-		@items = @category.items.order('created_at DESC').page(params[:page])
+		@categories = @category.self_and_descendants.page(params[:page])
 	end
 
 	def set_item
@@ -90,6 +92,9 @@ class CategoriesController < ApplicationController
 		return params.require(:category).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
 	end
 
+	def set_searching
+		@q = Item.ransack(params[:q])
+	end
 
 
 end

@@ -5,13 +5,13 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:stock_no) %></th>
       <th><%= model_class.human_attribute_name(:status) %></th>
       <th><%= model_class.human_attribute_name(:serial_no) %></th>
       <th><%= model_class.human_attribute_name(:guarantee_start) %></th>
       <th><%= model_class.human_attribute_name(:guarantee_expiry) %></th>
       <th><%= model_class.human_attribute_name(:location_id) %></th>
-	<% if @item.serial_no.start_with?("C") %>
+	<% if @item.kind == "C" %>
       <th><%= model_class.human_attribute_name(:quantity) %></th>
 	<% end %>
 	<th><%= model_class.human_attribute_name(:delivery_date) %></th>
@@ -21,7 +21,7 @@
   <tbody>
     <% @pieces.each do |piece| %>
       <tr>
-        <td><%= link_to piece.id, item_piece_path(@item, piece) %></td>
+        <td><%= link_to piece.stockno, item_piece_path(@item, piece) %></td>
         <% if piece.status %>
         <td><i class="fa fa-check-circle-o text-success fa-lg"></i></td>
         <% else %>
@@ -31,7 +31,7 @@
         <td><%= piece.guarantee_start %></td>
         <td><%= piece.guarantee_expiry %></td>
         <td><%= piece.try(:location).try(:name) %></td>
-	<% if piece.serial_no.start_with?("C") %>
+	<% if piece.item.kind == "C" %>
         <td><%= piece.quantity %> <%= piece.item.unit.name %></td>
 	<% end %>
         <td><%= piece.delivery_date %></td>

@@ -34,10 +34,15 @@ Rails.application.routes.draw do
   get 'locations/:id/items', to: 'locations#items'
 
   get 'children_category' => 'children#get', :as => 'children_category'
+  get 'children_fill' => 'children#fill', :as => 'children_fill'
+
+  get 'search', to: 'items#search', :as => 'items_search'
   resources :items do
 	  resources :pieces
+    get 'search', on: :collection
+    get 'report', on: :collection
   end
-  get 'report', to: 'items#report', :as => 'items_report'
+
   # Example resource route with options:
   #   resources :products do
   #     member do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211150856) do
+ActiveRecord::Schema.define(version: 20160318212710) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",          limit: 255,  null: false
@@ -39,16 +39,14 @@ ActiveRecord::Schema.define(version: 20160211150856) do
     t.integer  "category_id",   limit: 4
     t.string   "brand",         limit: 255
     t.string   "model",         limit: 255
-    t.string   "serial_no",     limit: 255
     t.integer  "unit_id",       limit: 4
-    t.integer  "quantity",      limit: 4
     t.decimal  "price",                       precision: 10
     t.datetime "delivery_date"
-    t.integer  "location_id",   limit: 4
+    t.string   "kind",          limit: 1
+    t.string   "owner",         limit: 255
   end
 
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
-  add_index "items", ["location_id"], name: "index_items_on_location_id", using: :btree
   add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
 
   create_table "location_hierarchies", id: false, force: :cascade do |t|
@@ -87,6 +85,25 @@ ActiveRecord::Schema.define(version: 20160211150856) do
   add_index "pieces", ["item_id"], name: "index_pieces_on_item_id", using: :btree
   add_index "pieces", ["location_id"], name: "index_pieces_on_location_id", using: :btree
   add_index "pieces", ["user_id"], name: "index_pieces_on_user_id", using: :btree
+
+  create_table "pieces_reports", id: false, force: :cascade do |t|
+    t.integer "report_id", limit: 4
+    t.integer "piece_id",  limit: 4
+    t.text    "note",      limit: 65535
+    t.boolean "status"
+  end
+
+  add_index "pieces_reports", ["piece_id"], name: "index_pieces_reports_on_piece_id", using: :btree
+  add_index "pieces_reports", ["report_id"], name: "index_pieces_reports_on_report_id", using: :btree
+
+  create_table "reports", force: :cascade do |t|
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "user_id",    limit: 4
+    t.boolean  "submitted",            default: false
+  end
+
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "units", force: :cascade do |t|
     t.string   "name",       limit: 255

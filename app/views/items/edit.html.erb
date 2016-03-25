@@ -3,3 +3,15 @@
   <h1><%=t '.title', :default => [:'helpers.titles.edit', 'Edit %{model}'], :model => model_class.model_name.human.titleize %></h1>
 </div>
 <%= render :partial => 'form' %>
+
+<script>
+$(document).ready( function(){
+  $.ajax({
+    url: "<%= children_fill_path %>",
+    data: {
+      id : <%= @item.category.id %>,
+    },
+    dataType: "script"
+  });;
+});
+</script>

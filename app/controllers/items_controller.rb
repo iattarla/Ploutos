@@ -2,11 +2,14 @@ class ItemsController < ApplicationController
 
 
 	before_action :authenticate_user!
+  before_action :set_searching
 
 
 	def index
+
 		@items = Item.order('created_at DESC').page(params[:page])
 		@categories = Category.roots
+
 	end
 
 
@@ -26,22 +29,20 @@ class ItemsController < ApplicationController
 
 		@categories = Category.roots
 		@units = Unit.all
-		@serial_no = set_serial_no
 		@item = Item.new(create_params)
 
 		if @item.save
-			@item.update_columns(serial_no: @serial_no +"-"+ @item.id.to_s)
 
-			if (params[:serial_no][:type] == "D")
+			if @item.kind == "D"
 				params[:item][:quantity].to_i.times do
 					@piece = @item.pieces.build
 					@piece.save
-					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s, location_id: @item.location_id)
+					@piece.update_columns(location_id: params[:item][:location_id])
 				end
-			elsif (params[:serial_no][:type] == "C")
+			elsif @item.kind == "C"
 					@piece = @item.pieces.build
 					@piece.save
-					@piece.update_columns(serial_no: @item.serial_no + "-" + @piece.id.to_s, location_id: @item.location_id, quantity: @item.quantity)
+					@piece.update_columns(location_id: params[:item][:location_id], quantity: params[:item][:quantity])
 
 			end
 
@@ -64,6 +65,7 @@ class ItemsController < ApplicationController
 		@units = Unit.all
 
 		@locations = Location.all
+
 	end
 
 	def update
@@ -101,7 +103,9 @@ class ItemsController < ApplicationController
 
 		@item = Item.find(params[:id])
 
-		@item.pieces.destroy
+		if !@item.pieces.empty?
+			@item.pieces.destroy_all
+		end
 		@item.destroy
 
 		redirect_to items_path
@@ -119,12 +123,17 @@ class ItemsController < ApplicationController
 		end
 	end
 
+	def search
+  	#@items = Item.all.page(params[:page])
+		@items = @q.result.includes(:pieces).page(params[:page])
+	end
+
 
   private
 
 	def create_params
 
-		data = params.require(:item).permit(:name, :description, :brand, :model, :quantity, :unit_id, :price, :delivery_date, :location_id)
+		data = params.require(:item).permit(:name, :kind, :owner, :description, :brand, :model, :unit_id, :price, :delivery_date)
 
 		category_id = params.require(:category).permit(:id1,:id2,:id3, :id4, :id5).values.reject(&:empty?).compact.last
 
@@ -137,5 +146,8 @@ class ItemsController < ApplicationController
 		return params[:serial_no][:type] + params[:serial_no][:owner]
 	end
 
+	def set_searching
+		@q = Item.ransack(params[:q])
+	end
 
 end

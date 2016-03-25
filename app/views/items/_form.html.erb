@@ -16,17 +16,19 @@
   <% end %>
 
   <div class="form-group">
-	  <div class="btn-group btn-group-justified" data-toggle="buttons" >
-		<%= f.label :serial_no, class: "btn btn-default" do %> <%= radio_button :serial_no, "type", "D" %> Durable Goods <% end %>
-		<%= f.label :serial_no, class: "btn btn-default" do %> <%= radio_button :serial_no, "type", "C" %> Consumables <% end %>
-	  </div>
+	  <div class="btn-group btn-group-justified" data-toggle="" >
+    <%= f.collection_radio_buttons :kind, [["D", "Durable Good"], ["C", "Consumable"]], :first, :last do |b| %>
+    <%= b.label(:class => "btn btn-default") { b.radio_button + b.text } %>
+    <% end %>
+    </div>
   </div>
 
+
   <div class="form-group">
-  <div class="btn-group btn-group-justified" data-toggle="buttons">
-    <%= f.label :serial_no, class: "btn btn-default" do %> <%= radio_button :serial_no, "owner", 'TRL' %> TRL<% end %>
-	  <%= f.label :serial_no, class: "btn btn-default" do %> <%= radio_button :serial_no, "owner", 'HTE' %> IAT<% end %>
-    <%= f.label :serial_no, class: "btn btn-default" do %> <%= radio_button :serial_no, "owner", 'AUN' %> AUN<% end %>
+  <div class="btn-group btn-group-justified" data-toggle="">
+    <%= f.collection_radio_buttons :owner, [["TRL", "TRL"], ["HTE", "HTE"], ["AUN", "AUN"]], :first, :last do |b| %>
+    <%= b.label(:class => "btn btn-default") { b.radio_button + b.text } %>
+    <% end %>
 
   </div>
   </div>
@@ -117,17 +119,19 @@
     <%=f.error_span(:price) %>
   </div>
 
-  <div class="form-group">
+  <div class="form-group form-vertical">
     <%= f.label :unit_id, :class => 'control-label col-lg-2' %>
     <div class="col-lg-8">
-    	<div class = "input-group">
+    	<div class = "input-group form-vertical ">
     		<%= f.collection_select(:unit_id, @units, :id, :name, {}, { class: 'form-control'}) %>
-        <%= f.number_field :quantity, :class => 'form-control' %>
+        <% if @item.new_record? %>
+          <%= f.number_field "quantity", :class => 'form-control' %>
+        <% end %>
       </div>
     </div>
     <%=f.error_span(:unit) %>
   </div>
-
+<% if @item.new_record? %>
   <div class="form-group">
     <%= f.label :location_id, :class => 'control-label col-lg-2' %>
     <div class="col-lg-8">
@@ -135,8 +139,9 @@
     		<%= f.collection_select(:location_id, @locations, :id, :name, {}, { class: 'form-control'}) %>
       </div>
     </div>
-    <%=f.error_span(:unit) %>
+    <%=f.error_span(:location_id) %>
   </div>
+  <% end %>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-8">
@@ -152,6 +157,7 @@ $(document).ready( function() {
     $('#C1').click(function() {
       $.ajax({
         url: "<%= children_category_path %>",
+        async: false,
 	data: {
 		id : $('#C1 option:selected').val(),
 		which : "C1",
@@ -164,6 +170,7 @@ $(document).ready( function() {
     $('#C2').click(function() {
 	$.ajax({
         url: "<%= children_category_path %>",
+        async: false,
         data: {
 		id : $('#C2 option:selected').val(),
 		which : "C2",
@@ -176,6 +183,7 @@ $(document).ready( function() {
     $('#C3').click(function() {
       $.ajax({
         url: "<%= children_category_path %>",
+        async: false,
         data: {
 		id : $('#C3 option:selected').val(),
 		which : "C3",
@@ -188,6 +196,7 @@ $(document).ready( function() {
     $('#C4').click(function() {
       $.ajax({
         url: "<%= children_category_path %>",
+        async: false,
         data: {
           	id : $('#C4 option:selected').val(),
 	  	which : "C4",
@@ -202,14 +211,11 @@ $(document).ready( function() {
 $(function () {
         $('#dtpicker_delivery').datetimepicker({
             viewMode: 'years',
-            format: 'DD/MM/YYYY'
+            format: 'DD/MM/YYYY',
+            defaultDate: new Date()
         });
-    });
-
-function validateForm() {
+});
 
 
-  
-}
 
 </script>

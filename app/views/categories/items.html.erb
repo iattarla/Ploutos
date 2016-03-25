@@ -2,6 +2,8 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
+
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -17,8 +19,14 @@
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-  <tbody>
-    <% @items.each do |item| %>
+    <tbody>
+<% @categories.each do |category| %>
+<% next if category.items.empty? %>
+
+    <tr>
+      <th><h6><b>Category:</b> <%= category.ancestry_path.join(">>") %> <h6></tr>
+    </tr>
+      <% category.items.each do |item| %>
       <tr>
         <td><%= link_to t('.pieces', :default => t("helpers.links.pieces")),
                     item_pieces_path(item), :class => 'btn btn-success btn-xs' %>
@@ -27,8 +35,8 @@
         <td><%= item.try(:category).try(:name) %></td>
         <td><%= item.brand %></td>
         <td><%= item.model %></td>
-        <td><%= item.serial_no %></td>
-	<% if item.serial_no.start_with?("D") %>
+        <td><%= item.stockno %></td>
+	<% if item.kind == "D" %>
 	<td><%= item.pieces.count %> <%= item.unit.name %></td>
 	<% else %>
 	<td><%= item.quantity %> <%= item.unit.name %></td>
@@ -48,7 +56,8 @@
         </td>
       </tr>
     <% end %>
+<% end %>
   </tbody>
 </table>
 
-<%= will_paginate @items, renderer: BootstrapPagination::Rails %>
+<%= will_paginate @categories, renderer: BootstrapPagination::Rails %>
