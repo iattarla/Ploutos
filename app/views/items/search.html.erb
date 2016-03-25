@@ -1,0 +1,51 @@
+<%- model_class = Item -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%=t '.pieces', :default => t("helpers.pieces") %></th>
+      <th><%= model_class.human_attribute_name(:stock_no) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:category_id) %></th>
+      <th><%= model_class.human_attribute_name(:brand) %></th>
+      <th><%= model_class.human_attribute_name(:model) %></th>
+      <th><%= model_class.human_attribute_name(:quantity) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= link_to t('.pieces', :default => t("helpers.links.pieces")),
+                    item_pieces_path(item), :class => 'btn btn-success btn-xs' %>
+        </td>
+        <td><%= link_to item.stockno, item_path(item)  %></td>
+	      <td><%= item.name %></td>
+        <td><%= item.try(:category).try(:name) %></td>
+        <td><%= item.brand %></td>
+        <td><%= item.model %></td>
+	<% if item.kind == "D" %>
+	<td><%= item.pieces.count %> <%= item.unit.name %></td>
+	<% else %>
+	<td><%= item.pieces.sum(:quantity) %> <%= item.unit.name %></td>
+	<% end %>
+
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      item_path(item), :class => 'btn btn-info btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_item_path(item), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      item_path(item),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @items, renderer: BootstrapPagination::Rails %>

@@ -1,0 +1,86 @@
+<%- model_class = Report -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => [:'helpers.titles.edit', 'Edit %{model}'], :model => model_class.model_name.human.titleize %></h1>
+</div>
+
+
+  <% if @report.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@report.errors.count, "error") %> prohibited this report from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @report.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%= model_class.human_attribute_name(:status) %></th>
+        <th><%= model_class.human_attribute_name(:serial_no) %></th>
+        <th><%= model_class.human_attribute_name(:category) %></th>
+        <th><%= model_class.human_attribute_name(:name) %></th>
+        <th><%= model_class.human_attribute_name(:brand) %></th>
+        <th><%= model_class.human_attribute_name(:model) %></th>
+        <th><%= model_class.human_attribute_name(:quantity) %></th>
+      </tr>
+
+    </thead>
+    <tbody>
+    <%= form_tag(report_path(@report), {:method => :patch}) do %>
+
+      <% @pieces.each do |piece| %>
+      <%= fields_for "pieces[#{piece.id}]", piece do |pf| %>
+      	<tr>
+                <td><div class="form-group">
+                  <%= pf.check_box(:status, class: "report-checkbox") %>
+                    </div></td>
+                <td><%= piece.serial_no %></td>
+                <td><%= piece.item.category.name %></td>
+                <td><%= piece.item.name %></td>
+                <td><%= piece.item.brand %></td>
+                <td><%= piece.item.model %></td>
+
+              	<% if piece.serial_no.start_with?("D") %>
+                      <td><%= piece.item.pieces.count %> <%= piece.item.unit.name %></td>
+            	  <% else %>
+                      <td><%= piece.item.pieces.sum(:quantity) %> <%= piece.item.unit.name %></td>
+              	<% end %>
+        </tr>
+        <tr>
+          <td colspan=7 class="report-text hidden", id="hebele">
+              <%= pf.text_field(:notes, placeholder: "Note" ,class: "form-control") %>
+          </td>
+        </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+      <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+          <%= submit_tag("Submit",:class => 'btn btn-primary') %>
+          <%= link_to t('.cancel', :default => t("helpers.links.cancel")), reports_path, :class => 'btn btn-default' %>
+        </div>
+      </div>
+    <% end %>
+<script type="text/javascript">
+    $("[class='report-checkbox']").bootstrapSwitch({
+      size: 'mini',
+      onColor: 'success',
+      offColor: 'danger',
+      indeterminate: true,
+      onSwitchChange: function(event, state) {
+        if (state == false){
+        console.log($(this).closest());
+        }else if(state == true){
+        $(this).next('tr.td.report-text').addClass('hidden');
+        }
+      }
+    });
+</script>
