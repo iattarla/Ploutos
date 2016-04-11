@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20160318212710) do
     t.string   "brand",         limit: 255
     t.string   "model",         limit: 255
     t.integer  "unit_id",       limit: 4
+    t.integer  "quantity",      limit: 4
     t.decimal  "price",                       precision: 10
     t.datetime "delivery_date"
     t.string   "kind",          limit: 1
