@@ -18,12 +18,12 @@
       </thead>
       <tbody>
           <tr>
-            <td><%= item.serial_no %></td>
+            <td><%= item.stockno %></td>
     	      <td><%= item.name %></td>
             <td><%= item.brand %></td>
             <td><%= item.model %></td>
 
-    	<% if item.serial_no.start_with?("D") %>
+    	<% if item.kind == "D" %>
     	 <td><%= item.pieces.count %> <%= item.unit.name %></td>
       <% else %>
     	 <td><%= item.quantity %> <%= item.unit.name %></td>
