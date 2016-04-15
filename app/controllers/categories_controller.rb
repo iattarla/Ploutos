@@ -55,7 +55,8 @@ class CategoriesController < ApplicationController
 
 	def items
 		@category = Category.find(params[:id])
-		@categories = @category.self_and_descendants.page(params[:page])
+		@categories = @category.self_and_descendants
+		#@categories = @category.self_and_descendants.page(params[:page])
 	end
 
 	def set_item
