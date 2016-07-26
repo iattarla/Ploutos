@@ -14,4 +14,31 @@
  *= require_self
  *= require bootstrap-datetimepicker
  *= require bootstrap3-switch
+ *= require wice_grid
+ *= require bootstrap-datepicker3
+
  */
+
+.full-width.dropdown {
+    position: static;
+}
+.full-width.dropdown > .dropdown-menu {
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+.full-width.dropdown > .dropdown-menu > li > a {
+   white-space: normal;
+}
+
+
+.fill-width.dropdown {
+    position: static;
+}
+.fill-width.dropdown > .dropdown-menu {
+    left: auto;
+    position: absolute;
+}
+.fill-width.dropdown > .dropdown-menu > li > a {
+   white-space: normal;
+}

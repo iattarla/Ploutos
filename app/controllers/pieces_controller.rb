@@ -1,8 +1,37 @@
 class PiecesController < ApplicationController
-  before_action :authenticate_user!
+  layout "piece_filter", only: [:pieces]
+  before_action :authenticate_user!, except: [:print]
   before_action :set_piece, only: [:show, :edit, :update, :destroy]
   before_action :set_searching
 
+
+  def pieces
+
+    if params[:grid] && params[:grid][:items]
+      @selected = Item.find(params[:grid][:items])
+      @pieces_grid = initialize_grid(Piece,
+        include: [:item, :item, {item: :category}],
+        conditions: { item: @selected },
+        order: 'id',
+        per_page: 20
+        )
+    else
+      @pieces_grid = initialize_grid(Piece,
+        include: [:item, :location, :user, {item: :category}],
+        order: 'id',
+        per_page: 20
+        )
+    end
+    @items = Item.order('created_at DESC').page(params[:page])
+    @categories = Category.roots
+
+  end
+
+  def qzprint
+    if params[:grid] && params[:grid][:pieces]
+      @print = Piece.find(params[:grid][:pieces])
+    end
+  end
 
   # GET /pieces
   # GET /pieces.json
@@ -16,7 +45,35 @@ class PiecesController < ApplicationController
   def show
     @item = Item.find(params[:item_id])
     @piece = @item.pieces.find(params[:id])
-    @qr = RQRCode::QRCode.new(@piece.serial_no).to_img.resize(200, 200).to_data_url
+    @qr = RQRCode::QRCode.new(@piece.stockno).to_img.resize(200, 200).to_data_url
+  end
+
+  # GET /pieces/1/print
+  # GET /pieces/1/print.json
+  def print
+    @item = Item.find(params[:item_id])
+    @piece = @item.pieces.find(params[:id])
+    @qr = RQRCode::QRCode.new("http://192.168.14.175:3000/items/"+@item.id.to_s+"/pieces/"+@piece.id.to_s).to_img.resize(150,150).to_data_url
+
+    respond_to do |format|
+      format.html do
+        render :layout => false
+      end
+      format.pdf do
+        render pdf: "asd", :formats => [:html],
+                            grayscale: true,
+                            lowquality: true,
+                            print_media_type: true,
+                            orientation: 'Landscape',
+                            page_height: 115,
+                            page_width:47,
+                            margin: { top: 0,
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,}
+      end
+    end
+
   end
 
   # GET /pieces/new
@@ -44,13 +101,13 @@ class PiecesController < ApplicationController
     @users = User.all
     @locations = Location.all
 
-    if @item.serial_no.start_with?("D")
+    if @item.stockno.start_with?("D")
     	params[:piece][:quantity].to_i.times do
 
 		@piece = @item.pieces.create(piece_params)
 
     	    	if @piece.save
-    	    		@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
+    	    		#@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
     	    	else
     	    		@error=true
        		end
@@ -60,7 +117,7 @@ class PiecesController < ApplicationController
 		@piece = @item.pieces.create(piece_params)
 
 		if @piece.save
-    	    		@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
+    	    		#@piece.update_columns(serial_no: @piece.item.serial_no + "-" + @piece.id.to_s)
     	    	else
     	    		@error=true
     	   		end
@@ -117,7 +174,7 @@ class PiecesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def piece_params
-      params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :notes, :status, :user_id, :location_id, :quantity)
+      params.require(:piece).permit(:guarantee_start, :guarantee_expiry, :serial_no,:notes, :status, :user_id, :location_id, :quantity)
     end
 
   	def set_searching

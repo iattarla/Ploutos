@@ -10,6 +10,8 @@ class Item < ActiveRecord::Base
 
 	self.per_page = 20
 
+	scope :category, -> (category_id) { where category_id: category_id }
+
 	def stockno
     "#{kind}#{owner}-#{id}"
   end

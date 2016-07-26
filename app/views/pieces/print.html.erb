@@ -1,0 +1,21 @@
+<head><title><%= @piece.stockno%> Label</title><meta charset="UTF-8">
+</head>
+<body style="width: 400px; height: 150px;">
+  <div class="label">
+  <div class="qr" style="float: left;">
+  <%= image_tag @qr %>
+  </div>
+  <div class="info" style="float: left; margin-top: -14px; margin-left:-20px;">
+    <ul style="line-height: 155%;">
+    <b>
+    <li>N: <%= @piece.item.name%></li>
+    <li>C: <%= @item.category.name %></li>
+    <li>Stock: <%= @piece.stockno%></li>
+    <li>S.NO: <%= @piece.serial_no%></li>
+    <li>Status: <%= @piece.status ? "OK": "NOK!!"%></li>
+    <li>Created at: <%= Time.now.strftime('%d-%m-%Y')%></li>
+    </b>
+  </ul>
+  </div>
+</div>
+</body>

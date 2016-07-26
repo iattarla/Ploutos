@@ -21,6 +21,7 @@ gem "twitter-bootstrap-rails"
 #datetime picker
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+gem 'bootstrap-datepicker-rails'
 
 #bootstrap switch
 gem "bootstrap-switch-rails"
@@ -28,7 +29,9 @@ gem "bootstrap-switch-rails"
 gem 'will_paginate-bootstrap'
 
 #pdf
-gem 'pdfkit'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
 
 #Search
 gem 'ransack'
@@ -79,3 +82,7 @@ group :development do
 end
 
 gem 'migration_data'
+
+#wice_grid
+gem "wice_grid", '3.6.0.pre4'
+gem 'font-awesome-sass',  '~> 4.3'

@@ -64,7 +64,7 @@ class CategoriesController < ApplicationController
 
 		@category = Category.find(parent_id)
 
-		redirect_to category_items_path(@category)
+		redirect_to items_path(:id => parent_id)
 	end
 
 #	def get_leaves

@@ -18,3 +18,5 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-switch
+//= require wice_grid
+//= require bootstrap-datepicker

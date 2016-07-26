@@ -30,6 +30,7 @@ class UserDashboard < Administrate::BaseDashboard
     updated_at: Field::DateTime,
     admin: Field::Boolean,
     moderator: Field::Boolean,
+    username: Field::String,
   }
 
   # COLLECTION_ATTRIBUTES
@@ -40,6 +41,7 @@ class UserDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = [
     :id,
     :email,
+    :username,
     :encrypted_password,
     :reset_password_token,
   ]
@@ -53,6 +55,7 @@ class UserDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = [
     :email,
+    :username,
     :encrypted_password,
     :reset_password_token,
     :reset_password_sent_at,

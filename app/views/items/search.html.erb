@@ -1,9 +1,6 @@
 <%- model_class = Item -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
-</div>
 <table class="table table-striped">
-  <thead>
+  <thead id="item">
     <tr>
       <th><%=t '.pieces', :default => t("helpers.pieces") %></th>
       <th><%= model_class.human_attribute_name(:stock_no) %></th>
@@ -15,11 +12,11 @@
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="item">
     <% @items.each do |item| %>
       <tr>
         <td><%= link_to t('.pieces', :default => t("helpers.links.pieces")),
-                    item_pieces_path(item), :class => 'btn btn-success btn-xs' %>
+                    "#", :class => 'btn btn-success btn-xs' , :id => "pieces_link" %>
         </td>
         <td><%= link_to item.stockno, item_path(item)  %></td>
 	      <td><%= item.name %></td>
@@ -44,8 +41,67 @@
                       :class => 'btn btn-xs btn-danger' %>
         </td>
       </tr>
+          <thead id="pieces" hidden >
+            <tr class="info" >
+              <th></th>
+              <th ><i class="fa fa-long-arrow-down"></i></th>
+              <th><%= model_class.human_attribute_name(:serial_no) %></th>
+              <th><%= model_class.human_attribute_name(:location_id) %></th>
+              <th><%= model_class.human_attribute_name(:user) %></th>
+              <th></th>
+              <th></th>
+              <th></th>
+
+            </tr>
+          </thead>
+          <tbody id="pieces" hidden>
+          <% item.pieces.each do |piece| %>
+          <tr class="info">
+            <% if piece.status %>
+            <td style="text-align: right;"><i class="fa fa-check-circle-o text-success fa-lg"></i></td>
+            <% else %>
+            <td style="text-align: right;"><i class="fa fa-exclamation-triangle text-danger fa-lg"></i></td>
+            <% end %>
+            <td><%= link_to piece.stockno, item_piece_path(item, piece) %></td>
+
+            <td><%= piece.serial_no %></td>
+            <td><%= piece.try(:location).try(:name) %></td>
+            <td><%= piece.user.try(:username) %></td>
+            <td></td>
+                <% if piece.item.kind == "C" %>
+                      <td><%= piece.quantity %> <%= piece.item.unit.name %></td>
+              	<% else %>
+                      <td></td>
+                <% end %>
+                        <td>
+                          <%= link_to t('.show', :default => t("helpers.links.show")),
+                                      item_path(item), :class => 'btn btn-info btn-xs' %>
+                          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                      edit_item_path(item), :class => 'btn btn-default btn-xs' %>
+                          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                      item_path(item),
+                                      :method => :delete,
+                                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                                      :class => 'btn btn-xs btn-danger' %>
+                        </td>
+          </tr>
+          <% end %>
+            </tbody>
     <% end %>
   </tbody>
 </table>
 
+
 <%= will_paginate @items, renderer: BootstrapPagination::Rails %>
+
+<script>
+
+  $('a#pieces_link').click(function(){
+  $(this).closest("tbody").next().toggle();
+  $(this).closest("tbody").next().next().toggle();
+
+});
+
+
+
+</script>

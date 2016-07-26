@@ -1,0 +1,65 @@
+<script>
+function connectAndPrint() {
+    // our promise chain
+    connect()<% @print.each do |p| %>.then(function() {
+        return print(<%=p.item.id.to_s+","+p.id.to_s%>);
+    })<%end%>.then(function() {
+        success();              // exceptions get thrown all the way up the stack
+    }).catch(fail);             // so one catch is often enough for all promises
+
+}
+
+// connection wrapper
+//  - allows active and inactive connections to resolve regardless
+//  - try to connect once before firing the mimetype launcher
+//  - if connection fails, catch the reject, fire the mimetype launcher
+//  - after mimetype launcher is fired, try to connect 3 more times
+function connect() {
+    return new RSVP.Promise(function(resolve, reject) {
+        if (qz.websocket.isActive()) {	// if already active, resolve immediately
+            resolve();
+        } else {
+            // try to connect once before firing the mimetype launcher
+            qz.websocket.connect().then(resolve, function reject() {
+                // if a connect was not succesful, launch the mimetime, try 3 more times
+                window.location.assign("qz:launch");
+                qz.websocket.connect({ retries: 2, delay: 1 }).then(resolve, reject);
+            });
+        }
+    });
+}
+
+// print logic
+function print(item,piece) {
+    var printer = "TSC TTP-244CE";
+    var options =  {
+      size: { width: 40, height: 20},
+      density: 9,
+      units: "mm",
+      color: "blackwhite",
+      orientation: "portrait"
+      };
+    var config = qz.configs.create(printer, options);
+    var data = [{
+      type: 'html',
+      format: 'FILE',
+      options: {pageWidth: 100, pageHeight: 40},
+      data: '/items/'+item+'/pieces/'+piece+'/print.html' }];
+
+    // return the promise so we can chain more .then().then().catch(), etc.
+    return qz.print(config, data);
+}
+
+// notify successful print
+function success() {
+  window.close();
+}
+
+// exception catch-all
+function fail(e) {
+    alert("Error: " + e);
+}
+
+connectAndPrint();
+
+</script>

@@ -1,12 +1,26 @@
 class ItemsController < ApplicationController
-
-
+ layout "item_filter", only: [:index]
 	before_action :authenticate_user!
   before_action :set_searching
 
 
 	def index
 
+    if params[:id].present?
+      @cat = Category.find_by_id(params[:id]).self_and_descendants
+      @items_grid = initialize_grid(Item,
+        conditions: { category: @cat },
+        include: [:pieces,:category],
+        order: 'id',
+        per_page: 20
+        )
+    else
+      @items_grid = initialize_grid(Item,
+        include: [:pieces,:category],
+        order: 'id',
+        per_page: 20
+        )
+    end
 		@items = Item.order('created_at DESC').page(params[:page])
 		@categories = Category.roots
 
@@ -37,7 +51,7 @@ class ItemsController < ApplicationController
 				params[:item][:quantity].to_i.times do
 					@piece = @item.pieces.build
 					@piece.save
-					@piece.update_columns(location_id: params[:item][:location_id])
+					@piece.update_columns(location_id: params[:item][:location_id], quantity: 1)
 				end
 			elsif @item.kind == "C"
 					@piece = @item.pieces.build

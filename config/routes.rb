@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -38,10 +39,14 @@ Rails.application.routes.draw do
 
   get 'search', to: 'items#search', :as => 'items_search'
   resources :items do
-	  resources :pieces
+	  resources :pieces do
+      get 'print', on: :member
+    end
     get 'search', on: :collection
     get 'report', on: :collection
   end
+  get 'pieces', to: 'pieces#pieces', :as => 'pieces_index'
+  get 'qzprint', to: 'pieces#qzprint', :as => 'pieces_qzprint'
 
   # Example resource route with options:
   #   resources :products do

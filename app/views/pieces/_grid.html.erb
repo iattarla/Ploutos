@@ -1,0 +1,47 @@
+<%# show_filters: :when_filtered %>
+<%= grid(@pieces_grid, upper_pagination_panel: true, hide_submit_button: true, hide_reset_button: true) do |g|
+
+  g.action_column html_check_box: false, param_name: 'pieces'
+
+  g.column do |piece|
+      if piece.status
+      raw '<i class="fa fa-check-circle-o text-success fa-lg"></i>'
+      else
+      raw '<i class="fa fa-exclamation-triangle text-danger fa-lg"></i>'
+      end
+  end
+
+  g.column name: 'Stockno', attribute: 'id', detach_with_id: :id_filter do |piece|
+    piece.stockno
+  end
+  g.column name:  'Stock', attribute: 'quantity', filter_type: :range, detach_with_id: :stock_filter do |piece|
+    piece.quantity.to_s+" "+piece.item.unit.name
+  end
+  g.column name:  'Item Name', attribute: 'name', detach_with_id: :name_filter, assoc: :item
+
+  g.column name:  'Category', attribute: 'name', detach_with_id: :category_filter, assoc: [:item, :category]
+
+  g.column name:  'Location', attribute: 'name', detach_with_id: :location_filter, assoc: :location
+
+  g.column name:  'User', attribute: 'username', detach_with_id: :user_filter, assoc: :user
+
+
+
+  g.column   do |piece|
+          buffer = link_to t('.item', :default => t("helpers.links.item")),
+                      item_path(piece.item), :class => 'btn btn-success btn-xs'
+          buffer += " "
+          buffer += link_to t('.show', :default => t("helpers.links.show")),
+                      item_piece_path(piece.item, piece), :class => 'btn btn-info btn-xs'
+          buffer += " "
+          buffer += link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_item_piece_path(piece.item, piece), :class => 'btn btn-default btn-xs'
+          buffer += " "
+          buffer += link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      item_piece_path(piece.item,piece),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger'
+          raw buffer
+  end
+end -%>

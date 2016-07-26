@@ -2,7 +2,16 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
 </div>
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              item_pieces_path, :class => 'btn btn-default'  %>
 
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_item_piece_path(@item,@piece), :class => 'btn btn-default' %>
+<%= link_to t('.print', :default => t("helpers.links.print")),
+              print_item_piece_path(@item,@piece, :format => 'pdf'),
+              :onclick=>"window.open(this.href,'create_company', 'height=300, width=450');return false;",
+              :class => 'btn btn-success' %>
+<br><br>
 <dl class="dl-horizontal">
   <dt><strong>QR</strong></dt>
   <dd><%= image_tag @qr %></dd>
@@ -24,10 +33,7 @@
   <dd><%= @piece.location_id %></dd>
 </dl>
 
-<%= link_to t('.back', :default => t("helpers.links.back")),
-              item_pieces_path, :class => 'btn btn-default'  %>
-<%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_item_piece_path(@item,@piece), :class => 'btn btn-default' %>
+
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               item_piece_path(@item,@piece),
               :method => 'delete',

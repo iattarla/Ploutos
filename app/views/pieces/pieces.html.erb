@@ -1,0 +1,14 @@
+<%- model_class = Item -%>
+
+<!--<%= render :partial => 'categories' %>-->
+<% dump_filter_parameters_as_hidden_fields(@pieces_grid) %>
+<%= @print %>
+<%= form_for "#", :url => pieces_qzprint_path, method:  :get do |f| %>
+  <p><%= f.submit "Print Labels", :formtarget => "_blank", :class => 'btn btn-success' %></p>
+  <p><%= render :partial => 'grid' %> </p>
+<% end %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_item_path,
+            :class => 'btn btn-primary' %>
+<br>
+<%= will_paginate @items, renderer: BootstrapPagination::Rails %>
