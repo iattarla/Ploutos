@@ -6,7 +6,7 @@ class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
   def index
-    @locations = Location.order('created_at DESC').page(params[:page])
+    @locations = Location.all.order('created_at DESC')
   end
 
   # GET /locations/1
